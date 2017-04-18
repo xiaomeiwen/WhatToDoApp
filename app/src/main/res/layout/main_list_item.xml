@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
+    android:padding="@dimen/spacing_medium"
     android:background="?attr/selectableItemBackground">
 
-    <android.support.v7.widget.AppCompatCheckBox
+    <CheckBox
+        android:id="@+id/main_list_item_check"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/main_list_item_check"/>
+        android:layout_height="wrap_content"/>
 
     <TextView
+        android:id="@+id/main_list_item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/main_list_item_text"
-        tools:text="Task 1"
-        android:layout_marginLeft="8dp"/>
+        android:layout_marginLeft="@dimen/spacing_xsmall"
+        tools:text="Task 1"/>
 
 </LinearLayout>
