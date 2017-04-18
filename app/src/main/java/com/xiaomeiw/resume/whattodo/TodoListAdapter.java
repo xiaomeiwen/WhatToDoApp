@@ -1,12 +1,17 @@
 package com.xiaomeiw.resume.whattodo;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xiaomeiw.resume.whattodo.models.Todo;
 import com.xiaomeiw.resume.whattodo.utils.UIUtils;
@@ -17,6 +22,63 @@ import java.util.List;
  * Created by wenxiaomei on 17/4/17.
  */
 
+public class TodoListAdapter extends RecyclerView.Adapter {
+
+    private MainActivity activity;
+    private List<Todo> data;
+
+    public TodoListAdapter(MainActivity activity, @NonNull List<Todo> data) {
+        this.activity = activity;
+        this.data = data;
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.main_list_item, parent, false);
+        return new TodoListViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        final Todo todo = data.get(position);
+        ((TodoListViewHolder) holder).todoText.setText(todo.text);
+        ((TodoListViewHolder) holder).doneCheckbox.setChecked(todo.done);
+        UIUtils.setTextViewStrikeThrough(((TodoListViewHolder) holder).todoText, todo.done);
+
+        ((TodoListViewHolder) holder).todoText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, TodoEditActivity.class);
+                intent.putExtra(TodoEditActivity.KEY_TODO, todo);
+                activity.startActivityForResult(intent, MainActivity.REQ_CODE_TODO_EDIT);
+            }
+        });
+
+        ((TodoListViewHolder) holder).doneCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.updateTodo(todo, ((CheckBox) v).isChecked());
+            }
+        });
+
+       /* ((TodoListViewHolder) holder).doneCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                activity.updateTodo(todo.id, isChecked);
+            }
+        });*/
+
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return data.size();
+    }
+}
+
+/*
 public class TodoListAdapter extends BaseAdapter {
 
     private MainActivity activity;
@@ -85,3 +147,4 @@ public class TodoListAdapter extends BaseAdapter {
         CheckBox doneCheckbox;
     }
 }
+*/

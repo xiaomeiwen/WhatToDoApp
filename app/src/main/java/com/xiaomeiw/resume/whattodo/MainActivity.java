@@ -7,10 +7,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,10 +46,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         loadData();
 
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.main_recycler_view);
         adapter = new TodoListAdapter(this, todos);
-        ((ListView) findViewById(R.id.main_list_view)).setAdapter(adapter);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -84,11 +88,17 @@ public class MainActivity extends AppCompatActivity {
         ModelUtils.save(this, TODOS, todos);
     }
 
-    public void updateTodo(int index, boolean done) {
-        todos.get(index).done = done;
+    public void updateTodo(Todo todo, boolean done) {
 
-        adapter.notifyDataSetChanged();
-        ModelUtils.save(this, TODOS, todos);
+        for (int i = 0; i < todos.size(); ++i) {
+            Todo item = todos.get(i);
+            if (TextUtils.equals(item.id, todo.id)) {
+                todos.get(i).done = done;
+                adapter.notifyDataSetChanged();
+                ModelUtils.save(this, TODOS, todos);
+                break;
+            }
+        }
     }
 
     private void deleteTodo(@NonNull String todoId) {
